@@ -19,9 +19,6 @@
 [submodule "puppet/modules/vagrant"]
 	path = puppet/modules/vagrant
 	url = git@github.com:emyl/puppet-vagrant.git
-[submodule "newrelic"]
-	path = puppet/modules/newrelic
-	url = git@github.com:mwillbanks/puppet-newrelic.git
 [submodule "puppet/modules/newrelic"]
 	path = puppet/modules/newrelic
 	url = git@github.com:mwillbanks/puppet-newrelic.git
