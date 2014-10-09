@@ -14,7 +14,7 @@ node /rubystagingexample\d./ {
 }
 
 node /rubyproductionexample\d./ {
-  class { 'freaks::web':
+  class { 'freaks::websecure':
     gemset => 'production',
     app_name => 'production'
   }
