@@ -53,6 +53,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     puppet.module_path = 'puppet/modules'
     puppet.manifest_file  = 'site.pp'
     puppet.options = '--verbose'
-    puppet.facter = { newrelic_license_key: ENV['NEWRELIC_LICENSE_KEY'], rvm_version: '1.25.31', ruby_version: '2.1.3', authorized_keys: '' }
+    puppet.facter = { newrelic_license_key: ENV['NEWRELIC_LICENSE_KEY'], rvm_version: '1.26.3', ruby_version: '2.1.5', authorized_keys: '' }
   end
 end
