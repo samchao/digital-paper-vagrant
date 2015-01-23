@@ -28,7 +28,8 @@ class freaks::digital_paper (
     provider => git,
     source   => $repo_path,
     revision => 'master',
-    owner => $user
+    owner => $user,
+    force => true
   }->
   exec { 'web: copy database.yml.sample database.yml':
     command => "cd Digital-Paper && /bin/bash --login -c 'sudo cp config/database.yml.sample config/database.yml'",
