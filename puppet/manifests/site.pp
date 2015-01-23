@@ -6,28 +6,21 @@ package { "git":
   ensure => latest
 }
 
-node /rubystagingexample\d./ {
-  class { 'freaks::web':
-    gemset => 'staging',
-    app_name => 'staging'
+package { "nodejs": 
+  ensure => latest
+}
+
+package { "libpq-dev": 
+  ensure => latest
+}
+
+package { "default-jre": 
+  ensure => latest
+}
+
+node /web/ {
+  class { 'freaks::digital_paper':
+    gemset => 'digital-paper',
+    app_name => 'digital-paper'
   }
-}
-
-node /rubyproductionexample\d./ {
-  class { 'freaks::websecure':
-    gemset => 'production',
-    app_name => 'production'
-  }
-}
-
-node /^mongo\d.$/ {
-  class { 'freaks::mongo': }
-}
-
-node /lb\d./ {
-  class { 'freaks::haproxy': }
-}
-
-node 'admin' {
-  class { 'freaks::admin': }
 }

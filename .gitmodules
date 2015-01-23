@@ -22,3 +22,9 @@
 [submodule "puppet/modules/newrelic"]
 	path = puppet/modules/newrelic
 	url = git@github.com:mwillbanks/puppet-newrelic.git
+[submodule "puppet/modules/postgresql"]
+	path = puppet/modules/postgresql
+	url = git@github.com:puppetlabs/puppetlabs-postgresql.git
+[submodule "puppet/modules/vcsrepo"]
+	path = puppet/modules/vcsrepo
+	url = git@github.com:puppetlabs/puppetlabs-vcsrepo.git

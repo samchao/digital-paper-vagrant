@@ -12,5 +12,5 @@ class freaks::ruby (
   rvm_gemset { "$ruby_version@$gemset":
     ensure  => present
   }->
-  rvm::system_user { "$user": }
+  rvm::system_user { $user: }
 }

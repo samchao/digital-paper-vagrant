@@ -1,15 +1,90 @@
 class freaks::web_base (
     $gemset = 'freaks',
-    $app_name = 'freaks'
+    $app_name = 'freaks',
+    $user = 'deploy'
   ) {
-  class { 'newrelic':
-    license_key => $::newrelic_license_key,
-    use_latest  => true
-  }
-
   class { 'freaks::user': }->
   class { 'freaks::ruby':
-    gemset => $gemset
+    gemset => $gemset,
+    user => $user
+  }
+}
+
+class freaks::digital_paper (
+    $gemset = 'freaks',
+    $app_name = 'freaks',
+    $user = 'vagrant'  
+  ) {
+  class { 'freaks::web_base':
+    gemset => $gemset,
+    app_name => $app_name,
+    user => $user
+  }->
+  class { 'postgresql::server': 
+    postgres_password => 'postgres',
+  }->
+  vcsrepo { "/home/vagrant/Digital-Paper":
+    ensure   => latest,
+    provider => git,
+    source   => $repo_path,
+    revision => 'master',
+    owner => $user
+  }->
+  exec { 'web: copy database.yml.sample database.yml':
+    command => "cd Digital-Paper && /bin/bash --login -c 'sudo cp config/database.yml.sample config/database.yml'",
+    provider => shell,
+    user => $user,
+    environment => ["HOME=/home/$user"]
+  }->
+  exec { 'web: install gems':
+    command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle install'",
+    provider => shell,
+    user => $user,
+    timeout => 2000,
+    environment => ["HOME=/home/$user"]
+  }->
+  exec { 'web: create database':
+    command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rake db:create'",
+    provider => shell,
+    user => $user,
+    environment => ["HOME=/home/$user"]
+  }->
+  exec { 'web: run migrations':
+    command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rake db:migrate'",
+    provider => shell,
+    user => $user,
+    environment => ["HOME=/home/$user"]
+  }->
+  exec { 'web: seed':
+    command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rake db:seed'",
+    provider => shell,
+    user => $user,
+    environment => ["HOME=/home/$user"]
+  }->
+  exec { 'web: seed users':
+    command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rake db:seed_users'",
+    provider => shell,
+    user => $user,
+    environment => ["HOME=/home/$user"]
+  }->
+  exec { 'web: stop solr if started':
+    command => '/bin/true',
+    unless => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rake sunspot:solr:stop'",
+    provider => shell,
+    user => $user,
+    environment => ["HOME=/home/$user"]
+  }->
+  exec { 'web: run solr':
+    command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rake sunspot:solr:start'",
+    provider => shell,
+    user => $user,
+    environment => ["HOME=/home/$user"]
+  }->
+  exec { 'web: run':
+    command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rails s' &",
+    provider => shell,
+    user => $user,
+    environment => ["HOME=/home/$user"]
   }
 }
 
