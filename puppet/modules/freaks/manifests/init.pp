@@ -23,14 +23,6 @@ class freaks::digital_paper (
   class { 'postgresql::server': 
     postgres_password => 'postgres',
   }->
-  vcsrepo { "/home/vagrant/Digital-Paper":
-    ensure   => latest,
-    provider => git,
-    source   => $repo_path,
-    revision => 'master',
-    owner => $user,
-    force => true
-  }->
   exec { 'web: copy database.yml.sample database.yml':
     command => "cd Digital-Paper && /bin/bash --login -c 'sudo cp config/database.yml.sample config/database.yml'",
     provider => shell,
@@ -77,12 +69,6 @@ class freaks::digital_paper (
   }->
   exec { 'web: run solr':
     command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rake sunspot:solr:start'",
-    provider => shell,
-    user => $user,
-    environment => ["HOME=/home/$user"]
-  }->
-  exec { 'web: run':
-    command => "cd Digital-Paper && /bin/bash --login -c 'rvm use $ruby_version@$gemset do bundle exec rails s' &",
     provider => shell,
     user => $user,
     environment => ["HOME=/home/$user"]

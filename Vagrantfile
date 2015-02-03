@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.private_key_path = [ '~/.vagrant.d/insecure_private_key', '~/.ssh/id_rsa' ]
   config.ssh.forward_agent = true
 
-  config.vm.synced_folder 'Digital-Paper/', '/home/vagrant/Digital-Paper'
+  config.vm.synced_folder 'Digital-Paper/', '/home/vagrant/Digital-Paper', type: "rsync", rsync__exclude: ".git/"
 
   config.vm.define 'web' do |web|
     web.vm.box = "ubuntu/trusty64"
@@ -20,6 +20,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.customize ["modifyvm", :id, "--memory", 1024]
     end
   end
+
+  # set auto_update to false, if you do NOT want to check the correct 
+  # additions version when booting this machine
+  config.vbguest.auto_update = false
+
+  # do NOT download the iso file from a webserver
+  config.vbguest.no_remote = true
 
   config.vm.network "public_network"
   config.vm.network :forwarded_port, host: 3000, guest: 3000

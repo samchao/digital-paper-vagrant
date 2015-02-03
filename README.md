@@ -5,6 +5,7 @@ The base vagrant setup is derived for the applications Agilefreaks creates. Uses
 Requirement
 -----------
 - [vagrant](https://www.vagrantup.com/)
+- [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
 - [virtual box](https://www.virtualbox.org/)
 
 Run
@@ -28,7 +29,7 @@ Start your machine (have patience this might take a wile)
 
 It will create a default user `deploy` as per capistrano requerments
 
-Navigate to `http://locahost:3000`
+> Navigate to `http://locahost:3000`
 
 Destroy
 --------
